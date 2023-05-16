@@ -1,7 +1,17 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro"  name="robot">
 
-    <!-- Example link -->
-    <link name="base_link"></link>
+    <xacro:include filename="robot_core.xacro" />
+    <xacro:include filename="lidar.xacro" />
+    <xacro:include filename="camera.xacro" />
+
+    <!-- control scheme-->
+    <!-- basic gazebo control using plan topics-->
+    <!-- <xacro:include filename="gazebo_control.xacro" /> -->
+    <!-- Ros2 control -->
+    <xacro:include filename="ros2_control.xacro" />
+    
+
+
 
 </robot>

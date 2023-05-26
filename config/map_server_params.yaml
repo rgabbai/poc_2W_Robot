@@ -1,0 +1,4 @@
+# map_server_params.yaml
+map_server:
+    ros__parameters:
+        yaml_filename: "/home/rgabbai/projects/poc/2wheel_robot/dev_ws/plyg1_save_map.yaml"

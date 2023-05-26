@@ -11,7 +11,7 @@ from launch.substitutions import Command
 from launch.actions import IncludeLaunchDescription, TimerAction
 from launch.actions import RegisterEventHandler
 from launch.event_handlers import OnProcessStart
- 
+from launch.actions import ExecuteProcess 
 def generate_launch_description():
  
  
@@ -79,11 +79,31 @@ def generate_launch_description():
         )
     )
 
+    lidar = Node(
+            package='rplidar_ros',
+            executable='rplidar_composition',
+            output='screen',
+            parameters=[{
+                'serial_port': '/dev/serial/by-id/usb-Silicon_Labs_CP2102_USB_to_UART_Bridge_Controller_0001-if00-port0',
+                #'serial_port': '/dev/ttyUSB0',
+                'frame_id': 'laser_frame',
+                'angle_compensate': True,
+                'scan_mode': 'Standard'
+            }]
+    )
+
+     # Create a node to execute the service call
+    service_call_node = ExecuteProcess(
+        cmd=['ros2', 'service', 'call', '/stop_motor', 'std_srvs/srv/Empty', '{}'],
+        output='screen'
+    )
  
     # Launch them all!
     return LaunchDescription([
         rsp,
         delayed_controller_manager,
         delayed_diff_drive_spawner,
-        delayed_joint_broad_spawner
+        delayed_joint_broad_spawner,
+        lidar,
+        service_call_node
     ])

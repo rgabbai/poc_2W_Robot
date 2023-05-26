@@ -6,7 +6,10 @@ from launch.actions import IncludeLaunchDescription
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch_ros.actions import Node
 import xacro
- 
+# for adding delay mechansim 
+from launch.actions import IncludeLaunchDescription, TimerAction
+from launch.actions import RegisterEventHandler
+from launch.event_handlers import OnProcessStart
  
 def generate_launch_description():
  
@@ -54,18 +57,22 @@ def generate_launch_description():
                                    '-entity', 'poc_W2_Robot'],
                         output='screen')
  
-    
+
     diff_drive_spawner = Node(
     package="controller_manager",
     executable="spawner.py",
     arguments=["diff_cont"],
     )
+    delayed_diff_drive_spawner= TimerAction(period=3.0,actions=[diff_drive_spawner])
+
 
     joint_broad_spawner = Node(
     package="controller_manager",
     executable="spawner.py",
     arguments=["joint_broad"],
     )
+
+    delayed_joint_broad_spawner= TimerAction(period=3.0,actions=[joint_broad_spawner])
 
 
  
@@ -75,6 +82,6 @@ def generate_launch_description():
         node_robot_state_publisher,
         gazebo,
         spawn_entity,
-        diff_drive_spawner,
-        joint_broad_spawner
+        delayed_diff_drive_spawner,
+        delayed_joint_broad_spawner
     ])

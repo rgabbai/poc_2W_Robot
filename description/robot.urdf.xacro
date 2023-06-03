@@ -10,20 +10,19 @@
 -->
     <xacro:include filename="robot_core.xacro" />
     <xacro:include filename="lidar.xacro" />
+   <!--
     <xacro:include filename="camera.xacro" />
-
+    -->
   
     <!-- selecting what to run Gazebo or reak robot-->
 
     <xacro:if value="$(arg use_ros2_control)">
         <xacro:include filename="ros2_control.xacro" />
     </xacro:if>
-    <!--Basic Gazebo control without ros2_control-->
+    <!--Basic Gazebo control without ros2_control -->
     <xacro:unless value="$(arg use_ros2_control)">
         <xacro:include filename="gazebo_control.xacro" />
     </xacro:unless>
-    
-
 
 
 </robot>

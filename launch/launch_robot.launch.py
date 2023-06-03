@@ -26,21 +26,15 @@ def generate_launch_description():
                 )]), launch_arguments={'use_sim_time': 'false', 'use_ros2_control': 'true'}.items()
     )
 
-    pkg_path = os.path.join(get_package_share_directory('poc_2W_Robot'))
-    xacro_file = os.path.join(pkg_path,'description','robot.urdf.xacro')
-    #print("*************************************************xacro: "+str(xacro_file)+"\n")
-    robot_description_config = xacro.process_file(xacro_file)
-    robot_description_raw = robot_description_config.toxml()
-    #print ("************************************************* raw:"+str(robot_description_raw)+"\n")
+   
+    twist_mux_params = os.path.join(get_package_share_directory(package_name),'config','twist_mux.yaml')
+    twist_mux = Node(
+            package="twist_mux",
+            executable="twist_mux",
+            parameters=[twist_mux_params],
+            remappings=[('/cmd_vel_out','/diff_cont/cmd_vel_unstamped')]
+        )
 
-    # Create a robot_state_publisher node
-    params = {'robot_description': robot_description_raw , 'use_sim_time': False}
-    node_robot_state_publisher = Node(
-        package='robot_state_publisher',
-        executable='robot_state_publisher',
-        output='screen',
-        parameters=[params]
-    )
 
     robot_description = Command(['ros2 param get --hide-type /robot_state_publisher robot_description'])
     controller_params = os.path.join(get_package_share_directory(package_name),'config','my_controllers.yaml')
@@ -51,7 +45,7 @@ def generate_launch_description():
         parameters=[{'robot_description': robot_description},
                 controller_params],
         )
-    delayed_controller_manager = TimerAction(period=3.0,actions=[controller_manager])
+    delayed_controller_manager = TimerAction(period=2.0,actions=[controller_manager])
  
     diff_drive_spawner = Node(
         package="controller_manager",
@@ -70,6 +64,7 @@ def generate_launch_description():
         package="controller_manager",
         executable="spawner.py",
         arguments=["joint_broad"],
+        parameters=[{"log-level": "DEBUG"}]
     )
 
     delayed_joint_broad_spawner = RegisterEventHandler(
@@ -101,9 +96,10 @@ def generate_launch_description():
     # Launch them all!
     return LaunchDescription([
         rsp,
+        twist_mux,
         delayed_controller_manager,
-        delayed_diff_drive_spawner,
         delayed_joint_broad_spawner,
+        delayed_diff_drive_spawner,
         lidar,
         service_call_node
     ])

@@ -2,7 +2,7 @@ twist_mux:
   ros__parameters:
     topics:
       user:
-        topic   : cmd_vel
+        topic   : cmd_vel_joy
         timeout : 0.5
         priority: 100
       tracker:

@@ -1,0 +1,11 @@
+cd src
+colcon build
+source install/setup.bash
+cd ..
+
+## MPU node
+ros2 run mpu6050 imu_publisher_node &
+## Calman filter 
+ros2 run imu_filter_madgwick imu_filter_madgwick_node --ros-args -p use_mag:=false -p gain:=0.2 -r /imu/data_raw:=/mpu6050/imu/data &
+## roll pitch yaw srv
+ros2 run mpu6050 imu_offset_corrector & 

@@ -28,9 +28,16 @@ clone the following repos
 robot machine:
 Prepare robot_ws in robot linux system
 
+2 Build stage:
 
-colcon build --symlink-install
+cd src
+colcon build
 source install/setup.bash
+cd ..
+colcon build
+source install/setup.bash
+
+
 
 
 

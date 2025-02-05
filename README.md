@@ -1,3 +1,17 @@
+"Temp hack" - to be fixed later...
+Note this is the base repo for robot_ws directory
+clone this repo to a new dir name robot_ws
+crteate src dir -  clone other required repos under src: <br>
+robot_orientation/<br>
+teleop_twist_joy/<br> 
+diffdrive_arduino/<br>
+joy_to_array_topic/<br>
+mpu6050/<br>
+robot_control_pkg/<br>
+serial/<br>
+
+
+
 ## 2 Wheel Robot POC
 Goal
 Teleoperated robot capable to cut small weeds using a joystic and camera
